@@ -1,0 +1,44 @@
+import numpy as np
+
+def class_detector(example_outputs, v_cth, amplification):
+    """
+    Detects whether a class is identified based on the outputs from example detectors.
+    
+    Parameters:
+    example_outputs (list): Outputs from example detectors (1 for high, 0 for low).
+    v_cth (float): Threshold voltage for the comparator.
+    amplification (float): Amplification factor for the operational amplifier.
+    
+    Returns:
+    int: 1 if the class is detected (voltage > v_cth), 0 otherwise.
+    """
+    # Count the number of high outputs from example detectors
+    n_high = sum(example_outputs)
+    # Convert the count to voltage (simulating the op-amp behavior)
+    voltage = n_high * amplification
+    # Compare with threshold (simulating the comparator)
+    if voltage > v_cth:
+        return 1  # Class detected (high output)
+    else:
+        return 0  # Class not detected (low output)
+
+# Example outputs from example detectors (1 for high, 0 for low)
+example_outputs = [1, 1, 0, 1, 0]  # Example outputs from 5 detectors
+
+# Circuit parameters
+amplification = 1  # Amplification factor for the operational amplifier
+v_cth = 2.0  # Threshold voltage for the comparator
+
+# Simulate class detection
+result = class_detector(example_outputs, v_cth, amplification)
+
+# Output the results
+print(f"Example outputs from detectors: {example_outputs}")
+print(f"V_CTH: {v_cth}")
+print(f"Class detected: {'Yes' if result else 'No'}")
+
+# Demonstrate dynamic nature of V_CTH
+print("\nDemonstrating dynamic nature of V_CTH:")
+for v_cth in [1.0, 1.5, 2.0, 2.5, 3.0]:
+    result = class_detector(example_outputs, v_cth, amplification)
+    print(f"V_CTH: {v_cth:.3f}, Class detected: {'Yes' if result else 'No'}")
