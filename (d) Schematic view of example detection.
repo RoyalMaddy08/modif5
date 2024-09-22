@@ -1,0 +1,64 @@
+import numpy as np
+
+def euclidean_distance(input_vector, stored_vector):
+    """
+    Calculate the Euclidean distance between two vectors.
+    
+    Parameters:
+    input_vector (list or np.array): The input vector.
+    stored_vector (list or np.array): The stored vector.
+    
+    Returns:
+    float: The Euclidean distance between the input and stored vectors.
+    """
+    # Ensure both inputs are numpy arrays and calculate Euclidean distance
+    return np.sqrt(np.sum((np.array(input_vector) - np.array(stored_vector)) ** 2))
+
+def example_detector(input_vector, stored_vector, v_eth, amplification):
+    """
+    Detects whether an example is similar to the stored vector based on distance and voltage threshold.
+    
+    Parameters:
+    input_vector (list or np.array): The input vector.
+    stored_vector (list or np.array): The stored vector.
+    v_eth (float): Voltage threshold.
+    amplification (float): Amplification factor.
+    
+    Returns:
+    int: 1 if the example is detected (voltage < v_eth), 0 otherwise.
+    """
+    # Calculate Euclidean distance
+    distance = euclidean_distance(input_vector, stored_vector)
+    # Convert distance to voltage (simulating the op-amp behavior)
+    voltage = distance * amplification
+    # Compare with threshold (simulating the comparator)
+    if voltage < v_eth:
+        return 1  # Example detected (high output)
+    else:
+        return 0  # Example not detected (low output)
+
+# Circuit parameters
+amplification = 1  # Reduced amplification factor
+
+# Input attributes
+input_vector = [4.0, 6.0, 8.0]
+
+# Stored example attributes
+stored_vector = [3.0, 5.0, 7.0]
+
+# Simulate example detection
+v_eth = 2.0  # Increased voltage threshold
+result = example_detector(input_vector, stored_vector, v_eth, amplification)
+
+# Output the results
+print(f"Input vector: {input_vector}")
+print(f"Stored vector: {stored_vector}")
+print(f"V_ETH: {v_eth}")
+print(f"Euclidean distance: {euclidean_distance(input_vector, stored_vector):.6f}")
+print(f"Example detected: {'Yes' if result else 'No'}")
+
+# Demonstrate dynamic nature of V_ETH
+print("\nDemonstrating dynamic nature of V_ETH:")
+for v_eth in [1.0, 1.5, 2.0, 2.5, 3.0]:
+    result = example_detector(input_vector, stored_vector, v_eth, amplification)
+    print(f"V_ETH: {v_eth:.3f}, Example detected: {'Yes' if result else 'No'}")
