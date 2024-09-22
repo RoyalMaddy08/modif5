@@ -1,0 +1,75 @@
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import matplotlib.colors as mcolors
+
+# Set up the figure and axis
+fig, ax = plt.subplots(figsize=(14, 10))
+
+# Define a professional color palette
+colors = {
+    'rram': '#A8D0E6',  # Light blue
+    'attr': '#F76C6C',  # Salmon
+    'example': '#F8E9A1',  # Light yellow
+    'class': '#24305E',  # Navy blue
+    'control': '#A8D0E6'  # Light green
+}
+
+# Create patches for each component
+rram = mpatches.FancyBboxPatch((2, 4), 6, 3, boxstyle="round,pad=0.5", facecolor=colors['rram'], edgecolor='black', linewidth=2)
+attr = mpatches.FancyBboxPatch((0, 5), 2, 1, boxstyle="round,pad=0.3", facecolor=colors['attr'], edgecolor='black')
+example = mpatches.FancyBboxPatch((3, 2), 4, 1.5, boxstyle="round,pad=0.3", facecolor=colors['example'], edgecolor='black')
+class_det = mpatches.FancyBboxPatch((3, 0), 4, 1.5, boxstyle="round,pad=0.3", facecolor=colors['class'], edgecolor='black')
+threshold = mpatches.FancyBboxPatch((9, 6), 3, 1, boxstyle="round,pad=0.3", facecolor=colors['control'], edgecolor='black')
+row_voltage = mpatches.FancyBboxPatch((9, 4), 3, 1, boxstyle="round,pad=0.3", facecolor=colors['control'], edgecolor='black')
+
+# Add patches to the axis
+for patch in [rram, attr, example, class_det, threshold, row_voltage]:
+    ax.add_patch(patch)
+
+# Add labels
+ax.text(5, 5.3, "RRAM Crossbar Arrays", ha='center', va='center', fontsize=12, fontweight='bold')
+ax.text(1, 5.5, "Attribute\nSignal Sources", ha='center', va='center', fontsize=10)
+ax.text(5, 2.75, "Example Detectors", ha='center', va='center', fontsize=10)
+ax.text(5, 0.75, "Class Detectors", ha='center', va='center', fontsize=10, color='white')
+ax.text(10.5, 6.5, "Threshold\nControllers", ha='center', va='center', fontsize=10)
+ax.text(10.5, 4.5, "Row Voltage\nControllers", ha='center', va='center', fontsize=10)
+
+# Add arrows to show data flow
+arrow_params = dict(arrowstyle='->', color='#4A4A4A', lw=1.5, connectionstyle="arc3,rad=-0.1")
+ax.annotate("", xy=(2, 5.5), xytext=(1.5, 5.5), arrowprops=arrow_params)
+ax.annotate("", xy=(9, 6.5), xytext=(7.5, 6.5), arrowprops=arrow_params)
+ax.annotate("", xy=(9, 4.5), xytext=(7.5, 4.5), arrowprops=arrow_params)
+ax.annotate("", xy=(5, 4), xytext=(5, 3.5), arrowprops=arrow_params)
+ax.annotate("", xy=(5, 2), xytext=(5, 1.5), arrowprops=arrow_params)
+
+# Add parallel processing label
+ax.text(5, 3.75, "Parallel Processing", ha='center', va='center', fontsize=11, fontweight='bold', bbox=dict(facecolor='white', edgecolor='none', alpha=0.7))
+
+# Set title
+ax.set_title("RRAM-based Parallel Computing Architecture for Pattern Recognition", fontsize=14, fontweight='bold', pad=20)
+
+# Remove axis
+ax.set_axis_off()
+
+# Set limits
+ax.set_xlim(-0.5, 12.5)
+ax.set_ylim(-0.5, 7.5)
+
+# Add a legend
+legend_elements = [
+    mpatches.Patch(facecolor=colors['rram'], edgecolor='black', label='Storage & Computation'),
+    mpatches.Patch(facecolor=colors['attr'], edgecolor='black', label='Input'),
+    mpatches.Patch(facecolor=colors['example'], edgecolor='black', label='Detection'),
+    mpatches.Patch(facecolor=colors['class'], edgecolor='black', label='Classification'),
+    mpatches.Patch(facecolor=colors['control'], edgecolor='black', label='Control')
+]
+ax.legend(handles=legend_elements, loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
+
+# Adjust layout and save
+plt.tight_layout()
+plt.savefig("RRAM_architecture_improved.png", dpi=300, bbox_inches="tight")
+plt.close()
+
+# Display the saved image
+from IPython.display import Image
+Image("RRAM_architecture_improved.png")
