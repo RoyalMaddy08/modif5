@@ -1,0 +1,61 @@
+import matplotlib
+matplotlib.use('Agg')  # Use the 'Agg' backend for headless environments
+import matplotlib.pyplot as plt
+import numpy as np
+from IPython.display import display, Image
+import io
+
+def create_enhanced_knn_diagram():
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    components = [
+        'Input Attributes\nV1, V2, V3',
+        'Trained Attributes\nV4, V5, V6',
+        'Difference Calculation\n|V1-V4|, |V2-V5|, |V3-V6|',
+        'Squared Differences\n(V1-V4)², (V2-V5)², (V3-V6)²',
+        'Summed Distance\nD = Σ(Vi-Vi\')²',
+        'Current Calculation\nI = G * V * D',
+        'Example Detector\n(Threshold)',
+        'Class Detector\n(Threshold)'
+    ]
+
+    y_positions = np.linspace(0.9, 0.1, len(components))
+    box_height = 0.1
+    box_width = 0.7
+
+    for i, (label, y) in enumerate(zip(components, y_positions)):
+        rect = plt.Rectangle((0.15, y - box_height/2), box_width, box_height,
+                             fill=False, edgecolor='black', lw=2)
+        ax.add_patch(rect)
+        ax.text(0.5, y, label, fontsize=10, ha='center', va='center',
+                bbox=dict(facecolor='white', edgecolor='none', alpha=0.8))
+
+        if i < len(components) - 1:
+            ax.annotate('', xy=(0.5, y_positions[i+1] + box_height/2),
+                        xytext=(0.5, y - box_height/2),
+                        arrowprops=dict(facecolor='black', edgecolor='black',
+                                        arrowstyle='->', lw=1.5))
+
+    ax.set_xlim([0, 1])
+    ax.set_ylim([0, 1])
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    ax.set_title('Figure 1: kNN Classifier Architecture (Enhanced)', fontsize=14)
+
+    plt.tight_layout()
+    return fig
+
+# Create the enhanced diagram
+fig = create_enhanced_knn_diagram()
+
+# Save the figure to a bytes buffer
+buf = io.BytesIO()
+fig.savefig(buf, format='png', dpi=200)
+buf.seek(0)
+
+# Display the image
+display(Image(data=buf.getvalue()))
+
+# Close the figure to free up memory
+plt.close(fig)
