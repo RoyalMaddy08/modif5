@@ -1,0 +1,55 @@
+import numpy as np
+
+def binary_squared_euclidean_distance(a, b):
+    """
+    Calculate the squared Euclidean distance for binary inputs.
+
+    Parameters:
+    a (np.array): Binary input vector.
+    b (np.array): Binary trained vector.
+
+    Returns:
+    int: Binary squared Euclidean distance (sum of XORs).
+    """
+    # XOR the binary vectors and sum the results
+    return np.sum(np.bitwise_xor(a, b))
+
+def total_current_binary(a, b, G_u, V_u):
+    """
+    Calculate the total current for binary inputs based on squared
+    Euclidean distance.
+
+    Parameters:
+    a (np.array): Binary input example vector.
+    b (np.array): Binary trained example vector.
+    G_u (float): Unit conductance of RRAM.
+    V_u (float): Unit read voltage.
+
+    Returns:
+    float: Total current based on binary squared Euclidean distance.
+    """
+    # Calculate binary squared Euclidean distance
+    distance = binary_squared_euclidean_distance(a, b)
+    # Total current proportional to the distance
+    current = G_u * V_u * distance
+    return current
+
+# Example usage
+if __name__ == "__main__":
+    # Define example binary vectors
+    input_example = np.array([1, 0, 1, 0, 1])  # Binary input vector
+    trained_example = np.array([1, 1, 0, 0, 1])  # Binary trained vector
+    
+    # Define RRAM parameters
+    G_u = 1e-3  # Conductance in Siemens
+    V_u = 1.0   # Voltage in Volts
+    
+    # Calculate binary squared Euclidean distance
+    distance = binary_squared_euclidean_distance(input_example, trained_example)
+    
+    # Calculate total current
+    current = total_current_binary(input_example, trained_example, G_u, V_u)
+    
+    # Output the results
+    print(f"Binary Squared Euclidean Distance: {distance}")
+    print(f"Total Current: {current} A")
