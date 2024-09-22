@@ -1,0 +1,50 @@
+import numpy as np
+
+def calculate_squared_distance_and_current(input_example, trained_examples, conductance):
+    """
+    Calculate squared Euclidean distance and total current for kNN classification.
+
+    Parameters:
+    - input_example: array-like, shape (n,)
+        The input example attributes.
+    - trained_examples: array-like, shape (m, n)
+        The trained examples attributes.
+    - conductance: float
+        The conductance of each RRAM cell.
+
+    Returns:
+    - distances_magnitude: list
+        Magnitudes of squared distances to each trained example.
+    - currents_magnitude: list
+        Magnitudes of total current corresponding to each distance.
+    """
+    # Number of trained examples
+    m = trained_examples.shape[0]
+    
+    # Calculate squared distances
+    distances = np.zeros(m)
+    for i in range(m):
+        distances[i] = np.sum((input_example - trained_examples[i]) ** 2)
+    
+    # Calculate total current using Ohm's law
+    voltage = 1  # Example voltage value
+    total_current = conductance * voltage * distances  # Total current proportional to distances
+    
+    # Calculate magnitudes
+    distances_magnitude = np.abs(distances)
+    currents_magnitude = np.abs(total_current)
+    
+    return distances_magnitude.tolist(), currents_magnitude.tolist()
+
+# Example usage
+input_example = np.array([1.0, 2.0, 3.0])
+trained_examples = np.array([[1.5, 2.5, 3.5],
+                             [0.5, 1.5, 2.5],
+                             [1.0, 2.0, 3.0]])
+
+conductance = 0.01  # Example conductance value
+
+distances_magnitude, currents_magnitude = calculate_squared_distance_and_current(input_example, trained_examples, conductance)
+
+print("Squared Distances Magnitude:", distances_magnitude)
+print("Total Currents Magnitude:", currents_magnitude)
